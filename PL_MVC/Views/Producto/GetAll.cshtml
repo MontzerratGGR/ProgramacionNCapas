@@ -1,0 +1,159 @@
+﻿@model ML.Producto
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Productos</h1>
+            <h5>Todos los productos</h5>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <button button type="button" class="btn btn-info">Busqueda Abierta</button>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                @Html.ActionLink("Carga Masiva", "Carga", "Producto", new { @class = "btn btn-info" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-offset-10">
+                @Html.ActionLink("Agregar un solo producto", "FormProducto", "Producto", new { @class = "btn btn-success" })
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("GetAll", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="row">
+            <div class="col-md-3">
+
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", placeholder = "Nombre del producto" })
+                @Html.ValidationMessageFor(model => model.Nombre)
+            </div>
+
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Área", new { @class = "form-control", @id = "ddlArea" })
+
+            </div>
+
+            <div class="col-md-3">
+                @if (Model.Departamento.Departamentos != null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Nombre"), "Selecciona un Departamento", new { @class = "form-control", @id = "ddlDepartamento" })
+
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(string.Empty, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { @class = "form-control", @id = "ddlDepartamento" })
+
+                }
+            </div>
+            <div class="col-offset-1">
+                <input type="submit" data-toggle="modal" class="btn btn-success" value="Buscar" />
+
+            </div>
+            <br />
+        </div>
+    }
+
+</div>
+
+    @if (Model.Productos != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Actualizar</th>
+                                <th class="text-capitalize">IdProducto</th>
+                                <th class="text-center">Imagen</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Precio Unitario</th>
+                                <th class="text-center">Stock</th>
+                                <th class="text-center">Proveedor</th>
+                                <th class="text-center">Area</th>
+                                <th class="text-center">Departamento</th>
+                                <th class="text-center">Descripcion</th>
+                                <th class="text-center">Eliminar</th>
+                            </tr>
+                        </thead>
+                        @*Final de cabecera de tabla*@
+                        <tbody>
+                            @foreach (ML.Producto producto in Model.Productos)
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("FormProducto", "Producto", new { IdProducto = producto.IdProducto})"></a>
+                                    </td>
+                                    <td>@producto.IdProducto</td>
+
+                                    @if (producto.Imagen != null)
+                                    {
+                                        <td>
+                                            <img src="data:image/png;base64,@Convert.ToBase64String(producto.Imagen)" alt="@producto.Nombre" class="img-thumbnail" />
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <img src="~/images/imageDefault.png" alt="@producto.Nombre" class="img-thumbnail" />
+                                        </td>
+                                    }
+                                    <td>@producto.Nombre</td>
+                                    <td>@producto.PrecioUnitario</td>
+                                    <td>@producto.Stock</td>
+                                    <td>@producto.Proveedor.Nombre</td>
+                                    <td>@producto.Departamento.Area.Nombre</td>
+                                    <td>@producto.Departamento.Nombre</td>
+                                    <td>@producto.Descripcion</td>
+                                    <td>
+                                        <a class="btn btn-danger glyphicon glyphicon-trash"
+                                           href="@Url.Action("Delete","Producto",  new { IdProducto = producto.IdProducto})"
+                                           onclick="return confirm('¿Estás seguro de eliminar este registro?')">
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlArea").change(function () {
+            $("#ddlDepartamento").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DepartamentoGetByIdArea")',
+                dataType: 'json',
+                data: { IdArea: $("#ddlArea").val() },
+                success: function (departamentos) {
+                    $("#ddlDepartamento").append('<option value="0">' + 'Seleccione un Departamento' + '</option>');
+                    $.each(departamentos, function (i , departamento) {
+                        $("#ddlDepartamento").append('<option value="'
+                            + departamento.IdDepartamento + '">'
+                            + departamento.Nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed. ' + ex);
+                }
+            });
+        });
+    });
+</script>

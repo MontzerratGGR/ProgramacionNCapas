@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="17a8575ea2e04506a0e6715cf040165e" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Rol" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Usuario" Width="1.5" PointX="2.625" PointY="0.5" IsExpanded="true" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdRol" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Colonia" Width="1.75" PointX="4.75" PointY="3.625" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Direccion" Width="1.75" PointX="4.75" PointY="0.5" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Estado" Width="1.75" PointX="7.125" PointY="0.5" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Municipio" Width="1.75" PointX="7.125" PointY="3.5" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Pai" Width="1.75" PointX="9.75" PointY="0.5" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdColonia" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdMunicipio" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdUsuario" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdEstado" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK_IdPais" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Departamento" Width="1.5" PointX="0.625" PointY="7.25" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Proveedor" Width="1.5" PointX="5.375" PointY="7.125" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Producto" Width="1.5" PointX="3" PointY="7.125" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK__Producto__IdDepa__75A278F5" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK__Producto__IdProv__74AE54BC" />
+        <EntityTypeShape EntityType="MGonzalezProgramacionNCapas2.Area" Width="1.5" PointX="0.625" PointY="4.875" />
+        <AssociationConnector Association="MGonzalezProgramacionNCapas2.FK__Departame__IdAre__7E37BEF6" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

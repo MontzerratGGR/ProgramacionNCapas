@@ -1,0 +1,94 @@
+﻿@model ML.Producto
+@{
+    ViewBag.Title = "Carga";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Productos</h1>
+            <h5>Seleccione un archivo tipo .txt o .xlsx para cargar la tabla</h5>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Carga", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <button button type="button" class="btn btn-secondary btn-lg">Cargar desde archivo de Texto</button>
+            </div>
+
+            <div class="col-lg-offset-8">
+                <button button type="button" class="btn btn-success btn-lg">Cargar desde archivo Excel</button>
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="col-md-4">
+                <input type="file" id="fuTXT" name="fuTxtCargaMasivaProducto" />
+            </div>
+
+            @if (Session["ListProductos"] == null)
+            {
+
+                <div class="col-md-1">
+                    <button button type="submit" class="btn btn-warning">Visualizar</button>
+                </div>
+
+            }
+            else
+            {
+                <div class="col-md-1">
+                    <button button type="submit" class="btn btn-info">Cargar</button>
+                </div>
+            }
+
+        </div>
+        <hr />
+    }
+
+    @if (Model.Productos != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Precio Unitario</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-center">IdProveedor</th>
+                            <th class="text-center">IdDepartamento</th>
+                            <th class="text-center">Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.Producto producto in Model.Productos)
+                        {
+                            <tr class="text-center">
+                                <td>@producto.Nombre</td>
+                                <td>@producto.PrecioUnitario</td>
+                                <td>@producto.Stock</td>
+                                <td>@producto.IdProveedor</td>
+                                <td>@producto.IdDepartamento</td>
+                                <td>@producto.Descripcion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-offset-12">
+                    <a class="btn btn-default glyphicon glyphicon-save"></a>
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+</div>
+

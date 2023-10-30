@@ -1,0 +1,149 @@
+﻿@model ML.Producto
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Agregar Productos</h1>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("FormProducto", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.IdProducto, new { @class = "form-control hidden" })
+                @Html.TextBoxFor(model => model.IdProducto, new { @class = "form-control hidden" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Nombre)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.PrecioUnitario)
+                @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PrecioUnitario)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Stock)
+                @Html.TextBoxFor(model => model.Stock, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Stock)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Proveedor.IdProveedor)
+                @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Provedores, "IdProveedor", "Nombre"), "Seleccione una opción", new { @class = "form-control", @id = "ddlProveedor" })
+                <br />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+
+                @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Área", new { @class = "form-control", @id = "ddlArea" })
+
+            </div>
+
+            <div class="col-md-4">
+                @if (Model.Departamento.Departamentos != null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Nombre"), "Selecciona un Departamento", new { @class = "form-control", @id = "ddlDepartamento" })
+
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(string.Empty, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { @class = "form-control", @id = "ddlDepartamento" })
+
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Descripcion)
+                @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Descripcion)
+            </div>
+        </div>
+
+        <div class="mb-3">
+            @*//IMAGEN*@
+            <div class="col-md-12">
+                @Html.LabelFor(model => Model.Imagen)
+                @Html.HiddenFor(model => Model.Imagen)
+                <input type="file" id="fuImagen" onchange="imgPreview(event);" name="fuImagen" />
+                @if (Model.Imagen == null)
+                {
+                    <img id="imgProducto" src="~/images/imageDefault.png" style="width:200px; height:200px;" />
+                }
+                else
+                {
+                    <img id="imgProducto" src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)" style="width:200px; height:200px;" />
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <input type="submit" data-toggle="modal" class="btn btn-success" value="Guardar" />
+            </div>
+            <div class="col-md-1">
+                @Html.ActionLink("Cancelar", "GetAll", "Producto", new { @class = "btn btn-danger" })
+                <br />
+            </div>
+        </div>
+
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    function imgPreview(event) {
+        var output = document.getElementById('imgProducto');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+</script>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlArea").change(function () {
+            $("#ddlDepartamento").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DepartamentoGetByIdArea")',
+                dataType: 'json',
+                data: { IdArea: $("#ddlArea").val() },
+                success: function (departamentos) {
+                    $("#ddlDepartamento").append('<option value="0">' + 'Seleccione un Departamento' + '</option>');
+                    $.each(departamentos, function (i , departamento) {
+                        $("#ddlDepartamento").append('<option value="'
+                            + departamento.IdDepartamento + '">'
+                            + departamento.Nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed. ' + ex);
+                }
+            });
+        });
+    });
+</script>
